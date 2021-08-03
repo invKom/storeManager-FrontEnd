@@ -1,14 +1,15 @@
-import { createStackNavigator } from "@react-navigation/native";
-import { createAppContainer } from "@react-navigation/native";
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 import HomePage from "../screens/HomePage.js";
+import LoginPage from "../screens/Login";
 import ScanningPage from "../screens/ScanningPage.js";
 
 const myScreens = {
   Home: {
     screen: HomePage,
   },
-  ScanningPage: {
-    screen: ScanningPage,
+  Login: {
+    screen: LoginPage,
   },
 };
 
