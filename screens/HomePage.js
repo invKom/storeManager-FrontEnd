@@ -11,9 +11,14 @@ import {
 const Separator = () => <View style={styles.separator} />;
 
 const HomePage = ({ navigation }) => {
+
   const handleLogin = () => {
     navigation.navigate("Login");
   };
+
+  const handleRegister = ()=>{
+    navigation.navigate("Register")
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,7 +36,7 @@ const HomePage = ({ navigation }) => {
 
         <Button
           title="Register"
-          onPress={() => Alert.alert("Simple Button pressed")}
+          onPress={handleRegister}
         />
       </View>
     </SafeAreaView>
