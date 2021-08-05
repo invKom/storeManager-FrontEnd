@@ -1,51 +1,52 @@
 import React from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { Input, Button, Center, NativeBaseProvider } from "native-base";
-export const Login = () => {
+import { View, StyleSheet, TextInput, Button, Text } from "react-native";
+import { Formik } from "formik";
+import { styles } from "styled-system";
+
+const Login = () => {
   const [show, setShow] = React.useState(false);
   const handleShowPass = () => setShow(!show);
 
+  const Separator = () => <View style={myStyles.separator} />;
+
+  const handleLoginSubmit = (values) => {};
+
   return (
     <>
-      <NativeBaseProvider>
-        <View style={myStyles.container}>
-          <Input
-            style={myStyles.input}
-            type="text"
-            placeholder="Email"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-          />
+      <View style={myStyles.container}>
+        <Formik
+          initialValues={{ Email: "", Password: "" }}
+          onSubmit={handleLoginSubmit}
+        >
+          {(formikProps) => (
+            <View>
+              <Text style={myStyles.text}>Email</Text>
+              <TextInput
+                style={myStyles.input}
+                onChangeText={formikProps.handleChange("Email")}
+                value={formikProps.values.Email}
+                autoCompleteType="email"
+              />
 
-          <Input
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            style={myStyles.input}
-            type={show ? "text" : "password"}
-            InputRightElement={
+              <Text style={myStyles.text}>Password</Text>
+              <TextInput
+                secureTextEntry={true}
+                style={myStyles.input}
+                autoCompleteType="password"
+                onChangeText={formikProps.handleChange("Password")}
+                value={formikProps.values.Password}
+              />
+
+              <Separator />
               <Button
-                ml={1}
-                roundedLeft={0}
-                roundedRight="md"
-                onPress={handleShowPass}
-              >
-                {show ? "Hide" : "Show"}
-              </Button>
-            }
-            placeholder="Password"
-          />
-
-          <Button onPress={() => Alert.alert("Login")}> Login </Button>
-        </View>
-      </NativeBaseProvider>
+                title="Login"
+                style={myStyles.btn}
+                onPress={formikProps.handleSubmit}
+              />
+            </View>
+          )}
+        </Formik>
+      </View>
     </>
   );
 };
@@ -58,11 +59,28 @@ const myStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
-    color: "#ffff",
   },
   input: {
+    textDecorationColor: "#ffff",
     color: "#ffff",
     marginBottom: "3%",
-    width: "70%",
+    width: 250,
+    padding: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#ffff",
+  },
+  btn: {
+    color: "#ffff",
+    width: 200,
+  },
+  text: {
+    color: "#ffff",
+  },
+
+  separator: {
+    marginVertical: 20,
+    borderBottomColor: "#ffff",
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 });
