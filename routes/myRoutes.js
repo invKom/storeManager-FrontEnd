@@ -16,6 +16,10 @@ const myScreens = {
   Register: {
     screen: RegisterPage,
   },
+
+  Scanning: {
+    screen: ScanningPage,
+  },
 };
 
 const myStack = createStackNavigator(myScreens);

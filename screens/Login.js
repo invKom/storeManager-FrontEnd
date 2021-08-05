@@ -9,7 +9,9 @@ const Login = () => {
 
   const Separator = () => <View style={myStyles.separator} />;
 
-  const handleLoginSubmit = (values) => {};
+  const handleLoginSubmit = (values) => {
+    const { Email, Password } = values;
+  };
 
   return (
     <>

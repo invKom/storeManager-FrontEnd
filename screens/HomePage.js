@@ -11,14 +11,17 @@ import {
 const Separator = () => <View style={styles.separator} />;
 
 const HomePage = ({ navigation }) => {
-
   const handleLogin = () => {
     navigation.navigate("Login");
   };
 
-  const handleRegister = ()=>{
-    navigation.navigate("Register")
-  }
+  const handleRegister = () => {
+    navigation.navigate("Register");
+  };
+
+  const handleScanningPage = () => {
+    navigation.navigate("Scanning");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,10 +37,11 @@ const HomePage = ({ navigation }) => {
         <Button title="Login" onPress={handleLogin} />
         <Separator />
 
-        <Button
-          title="Register"
-          onPress={handleRegister}
-        />
+        <Button title="Register" onPress={handleRegister} />
+
+        <Separator />
+
+        <Button title="Scanning Page" onPress={handleScanningPage} />
       </View>
     </SafeAreaView>
   );

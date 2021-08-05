@@ -9,14 +9,16 @@ const Register = () => {
 
   const Separator = () => <View style={myStyles.separator} />;
 
-  const handleLoginSubmit = (values) => {};
+  const handleRegisterSubmit = (values) => {
+    const { Email, Password, userName } = values;
+  };
 
   return (
     <>
       <View style={myStyles.container}>
         <Formik
           initialValues={{ Email: "", Password: "", userName: "" }}
-          onSubmit={handleLoginSubmit}
+          onSubmit={handleRegisterSubmit}
         >
           {(formikProps) => (
             <View>
