@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { NativeBaseProvider } from "native-base";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -12,11 +11,15 @@ import {
 
 import Navigator from "./routes/myRoutes.js";
 
+import ContextProvider from "./Context/myContext.js";
+
 export default function App() {
   return (
     <>
+      <ContextProvider>
         <StatusBar style="auto" />
         <Navigator />
+      </ContextProvider>
     </>
   );
 }

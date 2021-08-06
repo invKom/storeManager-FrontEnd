@@ -1,23 +1,50 @@
 import React from "react";
-import { View, StyleSheet, TextInput, Button, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Button,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Formik } from "formik";
-import { styles } from "styled-system";
+import * as yup from "yup";
+import useRegister from "../CustomHooks/RegisterHook.js";
+const validator =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
 
-const Register = () => {
-  const [show, setShow] = React.useState(false);
-  const handleShowPass = () => setShow(!show);
+const ReviewSchema = yup.object({
+  Email: yup.string().required(),
+  Password: yup
+    .string()
+    .required()
+    .test(
+      "testing-password",
+      "Minimum 6 characters, letters, numbers and special characters",
+      (val) => {
+        return validator.test(val);
+      }
+    ),
+  userName: yup.string().required().min(3),
+});
 
+const Register = ({ navigation }) => {
   const Separator = () => <View style={myStyles.separator} />;
 
-  const handleRegisterSubmit = (values) => {
-    const { Email, Password, userName } = values;
+  const handleRegisterSubmit = (values, actions) => {
+    useRegister(values, navigation);
+    actions.resetForm();
   };
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={myStyles.container}>
+        <Text style={myStyles.title}>Register</Text>
+
         <Formik
           initialValues={{ Email: "", Password: "", userName: "" }}
+          validationSchema={ReviewSchema}
           onSubmit={handleRegisterSubmit}
         >
           {(formikProps) => (
@@ -26,17 +53,25 @@ const Register = () => {
               <TextInput
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("Email")}
+                onBlur={formikProps.handleBlur("Email")}
                 value={formikProps.values.Email}
                 autoCompleteType="email"
               />
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.Email && formikProps.errors.Email}
+              </Text>
 
               <Text style={myStyles.text}>User Name</Text>
               <TextInput
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("userName")}
+                onBlur={formikProps.handleBlur("userName")}
                 value={formikProps.values.userName}
                 autoCompleteType="username"
               />
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.userName && formikProps.errors.userName}
+              </Text>
 
               <Text style={myStyles.text}>Password</Text>
               <TextInput
@@ -44,8 +79,13 @@ const Register = () => {
                 style={myStyles.input}
                 autoCompleteType="password"
                 onChangeText={formikProps.handleChange("Password")}
+                onBlur={formikProps.handleBlur("Password")}
                 value={formikProps.values.Password}
               />
+
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.Password && formikProps.errors.Password}
+              </Text>
 
               <Separator />
 
@@ -58,7 +98,7 @@ const Register = () => {
           )}
         </Formik>
       </View>
-    </>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -70,6 +110,12 @@ const myStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+  },
+  title: {
+    textAlign: "center",
+    color: "#ffff",
+    fontSize: 40,
+    marginBottom: 70,
   },
   input: {
     textDecorationColor: "#ffff",
@@ -93,5 +139,10 @@ const myStyles = StyleSheet.create({
     marginVertical: 20,
     borderBottomColor: "#ffff",
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 10,
+    maxWidth: "55%",
   },
 });

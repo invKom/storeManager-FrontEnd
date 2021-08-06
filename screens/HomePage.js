@@ -26,7 +26,10 @@ const HomePage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.intro}>
-        <Text style={styles.header}> InvKom </Text>
+        <Text style={styles.header}>
+          {" "}
+          Store Management ... Not a hard task anymore !{" "}
+        </Text>
       </View>
 
       <Separator />
@@ -60,8 +63,9 @@ const styles = StyleSheet.create({
     marginBottom: 90,
   },
   header: {
+    textAlign: "center",
     color: "#ffff",
-    fontSize: 40,
+    fontSize: 20,
     marginVertical: 10,
   },
   title: {

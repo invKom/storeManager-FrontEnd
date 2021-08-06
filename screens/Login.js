@@ -1,21 +1,39 @@
-import React from "react";
-import { View, StyleSheet, TextInput, Button, Text } from "react-native";
+import React, { useEffect, useContext } from "react";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Button,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Formik } from "formik";
-import { styles } from "styled-system";
+import { myContext } from "../Context/myContext.js";
+import useLogin from "../CustomHooks/LoginHook.js";
+const myURL = "https://invkom-backend.herokuapp.com";
 
-const Login = () => {
-  const [show, setShow] = React.useState(false);
-  const handleShowPass = () => setShow(!show);
+const Login = ({ navigation }) => {
+  const { token, setToken, error, setError } = useContext(myContext);
+
+  useEffect(() => {
+    setError(null);
+  }, []);
 
   const Separator = () => <View style={myStyles.separator} />;
 
-  const handleLoginSubmit = (values) => {
-    const { Email, Password } = values;
+  const handleLoginSubmit = (values, actions) => {
+    useLogin(values, navigation, token, setToken, error, setError);
+    actions.resetForm();
   };
+  // something wrong with the token
+  console.log(token);
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={myStyles.container}>
+        <Text style={myStyles.title}>Login</Text>
+
         <Formik
           initialValues={{ Email: "", Password: "" }}
           onSubmit={handleLoginSubmit}
@@ -48,8 +66,10 @@ const Login = () => {
             </View>
           )}
         </Formik>
+
+        {error ? <Text style={myStyles.error}>{error}</Text> : null}
       </View>
-    </>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -61,6 +81,12 @@ const myStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+  },
+  title: {
+    textAlign: "center",
+    color: "#ffff",
+    fontSize: 40,
+    marginBottom: 70,
   },
   input: {
     textDecorationColor: "#ffff",
@@ -84,5 +110,10 @@ const myStyles = StyleSheet.create({
     marginVertical: 20,
     borderBottomColor: "#ffff",
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  error: {
+    color: "red",
+    textAlign: "left",
+    fontSize: 15,
   },
 });
