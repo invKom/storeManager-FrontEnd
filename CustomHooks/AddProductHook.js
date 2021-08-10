@@ -1,13 +1,10 @@
-import React, { useContext } from "react";
-const { myContext } = require("../Context/myContext");
+import React from "react";
 
 const myURL = "https://invkom-backend.herokuapp.com";
 
-async function useAddProduct(values, navigation) {
+async function useAddProduct(values, navigation, myToken) {
   const { productName, productPrice, productCode, quantity, description } =
     values;
-
-  const { token } = useContext(myContext);
 
   try {
     const response = await fetch(`${myURL}/addProduct`, {
@@ -15,13 +12,13 @@ async function useAddProduct(values, navigation) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        authorization: token,
+        authorization: `Bearer ${myToken}`,
       },
       body: JSON.stringify({
         productName,
-        productPrice,
+        productPrice: parseInt(productPrice),
         productCode,
-        quantity,
+        quantity: parseInt(quantity),
         description,
       }),
     });

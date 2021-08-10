@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Button } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 
-export default function App() {
+export default function ScanningPage({ navigation }) {
   const {
     hasPermission,
     setHasPermission,
@@ -29,6 +29,8 @@ export default function App() {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
+    navigation.navigate("AddProduct");
+
     // console.log("Type: " + type + "\nData: " + data);
   };
 

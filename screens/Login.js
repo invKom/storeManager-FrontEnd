@@ -10,24 +10,48 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import { myContext } from "../Context/myContext.js";
-import useLogin from "../CustomHooks/LoginHook.js";
+const myURL = "https://invkom-backend.herokuapp.com";
 
 const Login = ({ navigation }) => {
   const { token, setToken, error, setError } = useContext(myContext);
 
   useEffect(() => {
     setError(null);
-    setToken("");
+    // setToken("");
+    console.log(token);
   }, []);
+
+  
 
   const Separator = () => <View style={myStyles.separator} />;
 
-  const handleLoginSubmit = (values, actions) => {
-    useLogin(values, navigation);
+  const handleLoginSubmit = async (values, actions) => {
+    const { Email, Password } = values;
+    try {
+      const response = await fetch(`${myURL}/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: Email,
+          password: Password,
+        }),
+      });
+      const toJson = await response.json();
+
+      console.log(toJson.response);
+      setToken(toJson.response.token);
+
+      navigation.navigate("AddProduct", { token: token });
+    } catch (error) {
+      console.error(error);
+      setError("Incorrect Email or Password");
+    }
+
     actions.resetForm();
   };
-
-  console.log(token);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

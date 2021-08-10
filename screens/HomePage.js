@@ -23,6 +23,10 @@ const HomePage = ({ navigation }) => {
     navigation.navigate("Scanning");
   };
 
+  const handleAddProductPage = () => {
+    navigation.navigate("AddProduct");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.intro}>
@@ -45,6 +49,8 @@ const HomePage = ({ navigation }) => {
         <Separator />
 
         <Button title="Scanning Page" onPress={handleScanningPage} />
+
+        <Button title="Add Product Page" onPress={handleAddProductPage} />
       </View>
     </SafeAreaView>
   );

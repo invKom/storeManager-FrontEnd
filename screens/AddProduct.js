@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -10,15 +10,19 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 
-import useAddProduct from '../CustomHooks/AddProductHook.js'
-
+import useAddProduct from "../CustomHooks/AddProductHook.js";
+import { myContext } from "../Context/myContext.js";
 
 
 const AddProduct = ({ navigation }) => {
+
+  const {text} = useContext(myContext)
+  
+  const myToken = navigation.getParam("token")
   const Separator = () => <View style={myStyles.separator} />;
 
   const handleAddProductSubmit = (values, actions) => {
-    useAddProduct(values, navigation)
+    useAddProduct(values, navigation, myToken);
     actions.resetForm();
   };
 
@@ -29,9 +33,9 @@ const AddProduct = ({ navigation }) => {
 
         <Formik
           initialValues={{
+            productCode: text,
             productName: "",
-         productPrice: "",
-            productCode: "",
+            productPrice: "",
             quantity: "",
             description: "",
           }}
@@ -39,28 +43,41 @@ const AddProduct = ({ navigation }) => {
         >
           {(formikProps) => (
             <View>
+              <Button
+                title="Scan Product Code"
+                style={myStyles.btn}
+                onPress={() => navigation.navigate("Scanning")}
+              />
+
               <TextInput
-                placeholder="Product Name"
                 style={myStyles.input}
+                onChangeText={formikProps.handleChange("productCode")}
+                onBlur={formikProps.handleBlur("productCode")}
+                value={formikProps.values.productCode}
+              />
+
+              <TextInput
+                style={myStyles.input}
+                placeholderTextColor="#ffff"
+                placeholder="Product Name"
                 onChangeText={formikProps.handleChange("productName")}
                 onBlur={formikProps.handleBlur("productName")}
                 value={formikProps.values.productName}
               />
-             
 
               <TextInput
-              keyboardType="number-pad"
+                keyboardType="number-pad"
+                placeholderTextColor="#ffff"
                 placeholder="Product Price"
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("productPrice")}
                 onBlur={formikProps.handleBlur("productPrice")}
                 value={formikProps.values.productPrice}
               />
-             
-               
 
               <TextInput
-                 keyboardType="number-pad"
+                keyboardType="number-pad"
+                placeholderTextColor="#ffff"
                 placeholder="Quantity"
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("quantity")}
@@ -68,26 +85,13 @@ const AddProduct = ({ navigation }) => {
                 value={formikProps.values.quantity}
               />
 
-           
-
               <TextInput
                 placeholder="Description"
+                placeholderTextColor="#ffff"
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("description")}
                 onBlur={formikProps.handleBlur("description")}
                 value={formikProps.values.description}
-              />
-
-
-
-
-
-              <TextInput
-                placeholder="Product Code"
-                style={myStyles.input}
-                onChangeText={formikProps.handleChange("productCode")}
-                onBlur={formikProps.handleBlur("productCode")}
-                value={formikProps.values.productCode}
               />
 
               <Separator />
@@ -129,7 +133,6 @@ const myStyles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#ffff",
-    placeholderTextColor="#ffff"
   },
   btn: {
     color: "#ffff",
