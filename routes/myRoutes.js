@@ -5,6 +5,7 @@ import HomePage from "../screens/HomePage.js";
 import LoginPage from "../screens/Login.js";
 import RegisterPage from "../screens/Register.js";
 import ScanningPage from "../screens/ScanningPage.js";
+import AddProduct from "../screens/AddProduct.js";
 
 import Header from "../Shared/Header.js";
 
@@ -25,6 +26,10 @@ const myScreens = {
 
   Scanning: {
     screen: ScanningPage,
+  },
+
+  AddProduct: {
+    screen: AddProduct,
   },
 };
 

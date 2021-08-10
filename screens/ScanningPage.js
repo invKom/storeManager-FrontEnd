@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { myContext } from "../Context/myContext";
 
 export default function App() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("Not yet scanned");
+  const {
+    hasPermission,
+    setHasPermission,
+    scanned,
+    setScanned,
+    text,
+    setText,
+  } = useContext(myContext);
 
   const askForCameraPermission = () => {
     (async () => {
@@ -23,14 +29,14 @@ export default function App() {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-    console.log("Type: " + type + "\nData: " + data);
+    // console.log("Type: " + type + "\nData: " + data);
   };
 
   // Check permissions and return the screens
   if (hasPermission === null) {
     return (
       <View style={styles.container}>
-        <Text>Requesting for camera permission</Text>
+        <Text>Camera permission</Text>
       </View>
     );
   }

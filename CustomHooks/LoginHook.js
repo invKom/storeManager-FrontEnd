@@ -1,8 +1,11 @@
-"use strict";
+import React, { useContext } from "react";
+const { myContext } = require("../Context/myContext");
+
 const myURL = "https://invkom-backend.herokuapp.com";
 
-async function useLogin(values, navigation, token, setToken, error, setError) {
+async function useLogin(values, navigation) {
   const { Email, Password } = values;
+  const { token, setToken, error, setError } = useContext(myContext);
   try {
     const response = await fetch(`${myURL}/login`, {
       method: "POST",
