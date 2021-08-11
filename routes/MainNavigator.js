@@ -17,13 +17,12 @@ const Drawer = createDrawerNavigator();
 export default function MyUserNavigation() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="UserPage">
+      <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomePage} />
 
         <Drawer.Screen name="UserPage" component={UserPage} />
         <Drawer.Screen name="AddProduct" component={AddProduct} />
         <Drawer.Screen name="SellingPage" component={SellingPage} />
-        {/* <Drawer.Screen name="Logout" component={HomePage} /> */}
 
         <Drawer.Screen name="Login" component={LoginPage} />
         <Drawer.Screen name="Register" component={RegisterPage} />

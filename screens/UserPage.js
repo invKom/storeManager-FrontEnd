@@ -8,7 +8,12 @@ const UserPage = ({ navigation }) => {
     navigation.navigate("SellingPage");
   };
 
-  return !token ? null : (
+  return !token ? (
+    <View style={styles.container}>
+      <Text> You have to be Logged in !</Text>
+      <Button title="Login" onPress={()=> navigation.navigate("Login")} />
+    </View>
+  ) : (
     <View style={styles.container}>
       <Button title="SellingPage" onPress={handleSellingPage} />
     </View>

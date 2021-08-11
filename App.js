@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 
-import MainNavigator from "./routes/UserPageStack";
+import MainNavigator from "./routes/MainNavigator";
 
 import ContextProvider from "./Context/myContext.js";
 

@@ -10,7 +10,6 @@ import {
 
 const Separator = () => <View style={styles.separator} />;
 
-// import MyHomeNavigation from "../routes/HomeStack";
 
 const HomePage = ({ navigation }) => {
   const handleLogin = () => {
@@ -23,7 +22,6 @@ const HomePage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <MyHomeNavigation /> */}
 
 
       <View style={styles.intro}>
