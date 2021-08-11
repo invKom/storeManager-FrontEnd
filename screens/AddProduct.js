@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -13,16 +13,13 @@ import { Formik } from "formik";
 import useAddProduct from "../CustomHooks/AddProductHook.js";
 import { myContext } from "../Context/myContext.js";
 
-
 const AddProduct = ({ navigation }) => {
+  const { token, text } = useContext(myContext);
 
-  const {text} = useContext(myContext)
-  
-  const myToken = navigation.getParam("token")
   const Separator = () => <View style={myStyles.separator} />;
 
   const handleAddProductSubmit = (values, actions) => {
-    useAddProduct(values, navigation, myToken);
+    useAddProduct(values, navigation, token);
     actions.resetForm();
   };
 

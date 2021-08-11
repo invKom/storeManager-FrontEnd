@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 
-export default function ScanningPage({ navigation }) {
+export default function SellingPage({ navigation }) {
   const {
     hasPermission,
     setHasPermission,
     scanned,
     setScanned,
-    text,
-    setText,
+    sellingCode,
+    setSellingCode,
+    products,
+    setProducts,
   } = useContext(myContext);
 
   const askForCameraPermission = () => {
@@ -25,6 +27,7 @@ export default function ScanningPage({ navigation }) {
 
   // Request Camera Permission
   useEffect(() => {
+    setProducts([]);
     askForCameraPermission();
   }, []);
 
@@ -32,14 +35,14 @@ export default function ScanningPage({ navigation }) {
     if (initialRender.current) {
       initialRender.current = false;
     } else {
-      navigation.navigate("AddProduct");
+      setProducts([...products, sellingCode]);
     }
-  }, [text]);
+  }, [sellingCode]);
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(data);
+    setSellingCode(data);
   };
 
   // Check permissions and return the screens
@@ -71,7 +74,12 @@ export default function ScanningPage({ navigation }) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
+
+      <FlatList
+        //   keyExtractor={(item)=> item._id}
+        data={products}
+        renderItem={({ item }) => <Text style={styles.maintext}>{item}</Text>}
+      />
 
       {scanned && (
         <Button
@@ -92,8 +100,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   maintext: {
-    fontSize: 16,
-    margin: 20,
+    fontSize: 15,
+    margin: 1,
   },
   barcodebox: {
     alignItems: "center",

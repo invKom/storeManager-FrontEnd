@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -15,13 +15,20 @@ const myURL = "https://invkom-backend.herokuapp.com";
 const Login = ({ navigation }) => {
   const { token, setToken, error, setError } = useContext(myContext);
 
+  // This to prevent useEffect from rendering at the initial render
+  const initialRender = useRef(true);
+
   useEffect(() => {
     setError(null);
-    // setToken("");
-    console.log(token);
   }, []);
 
-  
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      navigation.navigate("UserPage");
+    }
+  }, [token]);
 
   const Separator = () => <View style={myStyles.separator} />;
 
@@ -41,10 +48,8 @@ const Login = ({ navigation }) => {
       });
       const toJson = await response.json();
 
-      console.log(toJson.response);
-      setToken(toJson.response.token);
-
-      navigation.navigate("AddProduct", { token: token });
+      console.log(toJson);
+      setToken(toJson.token);
     } catch (error) {
       console.error(error);
       setError("Incorrect Email or Password");

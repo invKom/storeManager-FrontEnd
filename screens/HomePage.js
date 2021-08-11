@@ -10,6 +10,8 @@ import {
 
 const Separator = () => <View style={styles.separator} />;
 
+// import MyHomeNavigation from "../routes/HomeStack";
+
 const HomePage = ({ navigation }) => {
   const handleLogin = () => {
     navigation.navigate("Login");
@@ -19,16 +21,11 @@ const HomePage = ({ navigation }) => {
     navigation.navigate("Register");
   };
 
-  const handleScanningPage = () => {
-    navigation.navigate("Scanning");
-  };
-
-  const handleAddProductPage = () => {
-    navigation.navigate("AddProduct");
-  };
-
   return (
     <SafeAreaView style={styles.container}>
+      {/* <MyHomeNavigation /> */}
+
+
       <View style={styles.intro}>
         <Text style={styles.header}>
           {" "}
@@ -45,12 +42,6 @@ const HomePage = ({ navigation }) => {
         <Separator />
 
         <Button title="Register" onPress={handleRegister} />
-
-        <Separator />
-
-        <Button title="Scanning Page" onPress={handleScanningPage} />
-
-        <Button title="Add Product Page" onPress={handleAddProductPage} />
       </View>
     </SafeAreaView>
   );
