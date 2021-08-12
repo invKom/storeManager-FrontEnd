@@ -10,10 +10,13 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import { myContext } from "../Context/myContext.js";
+
+// Backend API
 const myURL = "https://invkom-backend.herokuapp.com";
 
 const Login = ({ navigation }) => {
-  const { token, setToken, error, setError } = useContext(myContext);
+  const { token, setToken, error, setError, user, setUser } =
+    useContext(myContext);
 
   // This to prevent useEffect from rendering at the initial render
   const initialRender = useRef(true);
@@ -32,9 +35,12 @@ const Login = ({ navigation }) => {
 
   const Separator = () => <View style={myStyles.separator} />;
 
+  // Handle submitting the form (two arguments Form Values and Form Actions).
   const handleLoginSubmit = async (values, actions) => {
     const { Email, Password } = values;
+
     try {
+      // fetch data from my backend API
       const response = await fetch(`${myURL}/login`, {
         method: "POST",
         headers: {
@@ -48,13 +54,15 @@ const Login = ({ navigation }) => {
       });
       const toJson = await response.json();
 
-      console.log(toJson);
+      setUser(toJson.response);
+
       setToken(toJson.token);
     } catch (error) {
       console.error(error);
       setError("Incorrect Email or Password");
     }
 
+    // Reset Form input values
     actions.resetForm();
   };
 

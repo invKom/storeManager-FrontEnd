@@ -3,19 +3,20 @@ import { Text, View, Button, StyleSheet } from "react-native";
 import { myContext } from "../Context/myContext";
 
 const UserPage = ({ navigation }) => {
-  const { token } = useContext(myContext);
-  const handleSellingPage = () => {
-    navigation.navigate("SellingPage");
+  const { token, setToken, user } = useContext(myContext);
+  const handleLogout = () => {
+    setToken("");
   };
 
-  return !token ? (
+  return (
     <View style={styles.container}>
-      <Text> You have to be Logged in !</Text>
-      <Button title="Login" onPress={()=> navigation.navigate("Login")} />
-    </View>
-  ) : (
-    <View style={styles.container}>
-      <Button title="SellingPage" onPress={handleSellingPage} />
+      <Text style={styles.title}> Welcome to your profile {user.userName}</Text>
+
+      <Button title="Logout" onPress={handleLogout} />
+
+      <Button title="Selling Status" />
+
+      <Button title="Inventory Status" />
     </View>
   );
 };
@@ -26,6 +27,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+  },
+
+  title: {
+    color: "#ffff",
+    textAlign: "center",
+    fontSize: 25,
+    marginBottom: 10,
   },
 });
 

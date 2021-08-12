@@ -5,6 +5,7 @@ export default function ContextProvider(props) {
   // To handle login
   const [token, setToken] = useState("");
   const [error, setError] = useState(null);
+  const [user, setUser] = useState({});
 
   // To handle code scanning
   const [hasPermission, setHasPermission] = useState(null);
@@ -30,6 +31,8 @@ export default function ContextProvider(props) {
     setProducts,
     sellingCode,
     setSellingCode,
+    user,
+    setUser,
   };
 
   return (

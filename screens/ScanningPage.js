@@ -44,24 +44,14 @@ export default function ScanningPage({ navigation }) {
 
   // Check permissions and return the screens
   if (hasPermission === null) {
-    return !token ? (
-      <View style={styles.container}>
-        <Text> You have to be Logged in !</Text>
-        <Button title="Login" onPress={() => navigation.navigate("Login")} />
-      </View>
-    ) : (
+    return (
       <View style={styles.container}>
         <Text>Camera permission</Text>
       </View>
     );
   }
   if (hasPermission === false) {
-    return !token ? (
-      <View style={styles.container}>
-        <Text> You have to be Logged in !</Text>
-        <Button title="Login" onPress={() => navigation.navigate("Login")} />
-      </View>
-    ) : (
+    return (
       <View style={styles.container}>
         <Text style={{ margin: 10 }}>No access to camera</Text>
         <Button
@@ -73,12 +63,7 @@ export default function ScanningPage({ navigation }) {
   }
 
   // Return the View
-  return !token ? (
-    <View style={styles.container}>
-      <Text> You have to be Logged in !</Text>
-      <Button title="Login" onPress={() => navigation.navigate("Login")} />
-    </View>
-  ) : (
+  return (
     <View style={styles.container}>
       <View style={styles.barcodebox}>
         <BarCodeScanner

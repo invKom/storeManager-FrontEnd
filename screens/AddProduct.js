@@ -23,12 +23,7 @@ const AddProduct = ({ navigation }) => {
     actions.resetForm();
   };
 
-  return !token ? (
-    <View style={styles.container}>
-      <Text> You have to be Logged in !</Text>
-      <Button title="Login" onPress={() => navigation.navigate("Login")} />
-    </View>
-  ) : (
+  return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={myStyles.container}>
         <Text style={myStyles.title}>Add Product</Text>
