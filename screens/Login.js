@@ -55,7 +55,6 @@ const Login = ({ navigation }) => {
       const toJson = await response.json();
 
       setUser(toJson.response);
-
       setToken(toJson.token);
     } catch (error) {
       console.error(error);
