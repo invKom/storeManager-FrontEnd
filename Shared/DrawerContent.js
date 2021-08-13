@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   drawerContent: {
     flex: 1,
     backgroundColor: "#ebe6e6",
+    height: "100%",
   },
   userInfoSection: {
     alignItems: "center",
