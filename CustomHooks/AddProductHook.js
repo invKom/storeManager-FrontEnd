@@ -22,8 +22,6 @@ async function useAddProduct(values, navigation, myToken) {
     });
     const toJson = await response.json();
 
-    console.log(toJson);
-
     navigation.navigate("AddProduct");
   } catch (error) {
     console.error(error);

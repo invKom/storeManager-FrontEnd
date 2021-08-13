@@ -15,6 +15,9 @@ import RegisterPage from "../screens/Register.js";
 
 import Header from "../Shared/Header.js";
 
+import { DrawerContent } from "../Shared/DrawerContent";
+import { DrawerContentUser } from "../Shared/DrawerContentUser";
+
 const Drawer = createDrawerNavigator();
 
 export default function MyUserNavigation() {
@@ -22,7 +25,10 @@ export default function MyUserNavigation() {
 
   return !token ? (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator
+        initialRouteName="Home"
+        drawerContent={(props) => <DrawerContent {...props} />}
+      >
         <Drawer.Screen name="Home" component={HomePage} />
         <Drawer.Screen name="Login" component={LoginPage} />
         <Drawer.Screen name="Register" component={RegisterPage} />
@@ -30,7 +36,10 @@ export default function MyUserNavigation() {
     </NavigationContainer>
   ) : (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="User">
+      <Drawer.Navigator
+        initialRouteName="User"
+        drawerContent={(props) => <DrawerContentUser {...props} />}
+      >
         <Drawer.Screen name="UserPage" component={UserPage} />
         <Drawer.Screen name="AddProduct" component={AddProduct} />
         <Drawer.Screen name="SellingPage" component={SellingPage} />

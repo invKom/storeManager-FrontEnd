@@ -16,6 +16,12 @@ export default function ContextProvider(props) {
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  // To handle Modals
+  const [toggleModal, setToggleModal] = useState(false);
+  const [toggleModalSelling, setToggleModalSelling] = useState(false);
+  const [invStatement, setInvStatement] = useState([]);
+  const [sellingStatement, setSellingStatement] = useState([]);
+
   let allState = {
     token,
     setToken,
@@ -33,6 +39,14 @@ export default function ContextProvider(props) {
     setUser,
     totalPrice,
     setTotalPrice,
+    toggleModal,
+    setToggleModal,
+    invStatement,
+    setInvStatement,
+    sellingStatement,
+    setSellingStatement,
+    toggleModalSelling,
+    setToggleModalSelling,
   };
 
   return (

@@ -60,7 +60,6 @@ export default function SellingPage({ navigation }) {
         });
         const toJson = await response.json();
 
-        console.log(toJson);
 
         // To not add the item twice
         if (toJson.length) {

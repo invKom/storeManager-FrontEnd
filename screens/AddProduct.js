@@ -51,7 +51,6 @@ const AddProduct = ({ navigation }) => {
                 onChangeText={formikProps.handleChange("productCode")}
                 value={text}
               />
-              {console.log("text in the form", text)}
 
               <TextInput
                 style={myStyles.input}
