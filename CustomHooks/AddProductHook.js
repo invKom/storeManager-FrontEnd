@@ -1,5 +1,3 @@
-import React from "react";
-
 const myURL = "https://invkom-backend.herokuapp.com";
 
 async function useAddProduct(values, navigation, myToken) {

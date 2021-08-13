@@ -30,9 +30,9 @@ const AddProduct = ({ navigation }) => {
 
         <Formik
           initialValues={{
-            productCode: text,
             productName: "",
             productPrice: "",
+            productCode: text,
             quantity: "",
             description: "",
           }}
@@ -49,9 +49,9 @@ const AddProduct = ({ navigation }) => {
               <TextInput
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("productCode")}
-                onBlur={formikProps.handleBlur("productCode")}
-                value={formikProps.values.productCode}
+                value={text}
               />
+              {console.log("text in the form", text)}
 
               <TextInput
                 style={myStyles.input}

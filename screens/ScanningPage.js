@@ -40,6 +40,7 @@ export default function ScanningPage({ navigation }) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
+    console.log("code inside scanning page", text);
   };
 
   // Check permissions and return the screens

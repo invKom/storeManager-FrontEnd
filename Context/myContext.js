@@ -11,10 +11,10 @@ export default function ContextProvider(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
-  const [sellingCode, setSellingCode] = useState("Not yet scanned");
 
   // To handle products to sell
   const [products, setProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   let allState = {
     token,
@@ -29,10 +29,10 @@ export default function ContextProvider(props) {
     setText,
     products,
     setProducts,
-    sellingCode,
-    setSellingCode,
     user,
     setUser,
+    totalPrice,
+    setTotalPrice,
   };
 
   return (

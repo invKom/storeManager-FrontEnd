@@ -3,16 +3,19 @@ import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 
+// import usePreSell from "../CustomHooks/PreSellHook";
+
 export default function SellingPage({ navigation }) {
   const {
     hasPermission,
     setHasPermission,
     scanned,
     setScanned,
-    sellingCode,
-    setSellingCode,
+    token,
     products,
     setProducts,
+    totalPrice,
+    setTotalPrice,
   } = useContext(myContext);
 
   const askForCameraPermission = () => {
@@ -22,27 +25,61 @@ export default function SellingPage({ navigation }) {
     })();
   };
 
-  // This to prevent useEffect from rendering at the initial render
-  const initialRender = useRef(true);
-
   // Request Camera Permission
   useEffect(() => {
     setProducts([]);
     askForCameraPermission();
   }, []);
 
+  // calculating total price
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      setProducts([...products, sellingCode]);
-    }
-  }, [sellingCode]);
+    products.forEach((item) => {
+      setTotalPrice((prev) => (prev += item.productPrice));
+    });
+  }, [products]);
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setSellingCode(data);
+
+    // fetching data from the back-end
+    async function PreSell(code, myToken) {
+      const myURL = "https://invkom-backend.herokuapp.com";
+
+      try {
+        const response = await fetch(`${myURL}/pre-sell`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            authorization: `Bearer ${myToken}`,
+          },
+          body: JSON.stringify({
+            barCode: code,
+          }),
+        });
+        const toJson = await response.json();
+
+        console.log(toJson);
+
+        // To not add the item twice
+        if (toJson.length) {
+          let alreadyThere = false;
+          products.forEach((obj) => {
+            obj._id !== toJson[0]._id
+              ? (alreadyThere = false)
+              : (alreadyThere = true);
+          });
+
+          if (!alreadyThere) {
+            setProducts([...products, toJson[0]]);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    PreSell(data, token);
   };
 
   // Check permissions and return the screens
@@ -76,14 +113,20 @@ export default function SellingPage({ navigation }) {
       </View>
 
       <FlatList
-        //   keyExtractor={(item)=> item._id}
         data={products}
-        renderItem={({ item }) => <Text style={styles.maintext}>{item}</Text>}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <Text style={styles.maintext}>
+            Product: {item.productName} |Price: {item.productPrice}$
+          </Text>
+        )}
       />
+
+      <Text style={styles.total}> Total: {totalPrice}$ </Text>
 
       {scanned && (
         <Button
-          title={"Scan again?"}
+          title={"Scan next product"}
           onPress={() => setScanned(false)}
           color="tomato"
         />
@@ -95,21 +138,27 @@ export default function SellingPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
   },
   maintext: {
-    fontSize: 15,
+    fontSize: 20,
     margin: 1,
+    color: "#ffff",
+  },
+  total: {
+    fontSize: 25,
+    color: "#ffff",
   },
   barcodebox: {
     alignItems: "center",
     justifyContent: "center",
-    height: 300,
-    width: 300,
+    height: 290,
+    width: 350,
     overflow: "hidden",
     borderRadius: 30,
     backgroundColor: "tomato",
+    marginTop: 15,
   },
 });

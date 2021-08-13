@@ -19,6 +19,10 @@ const UserPage = ({ navigation }) => {
     setToken("");
   };
 
+  // const handleSellingStatement = async () => {
+
+  // };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
