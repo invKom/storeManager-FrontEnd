@@ -7,6 +7,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Formik } from "formik";
 
@@ -14,12 +15,28 @@ import useAddProduct from "../CustomHooks/AddProductHook.js";
 import { myContext } from "../Context/myContext.js";
 
 const AddProduct = ({ navigation }) => {
-  const { token, text } = useContext(myContext);
-
   const Separator = () => <View style={myStyles.separator} />;
+  const { token, text, invStatement } = useContext(myContext);
 
   const handleAddProductSubmit = (values, actions) => {
-    useAddProduct(values, navigation, token);
+    let alreadyThere = false;
+    invStatement.forEach((item) => {
+      if (values.productCode != item.productCode) {
+        alreadyThere = false;
+      } else {
+        alreadyThere = true;
+        return Alert.alert("Error", "Product already in your inventory !", [
+          {
+            text: "Close",
+            onPress: () => console.log("pressed"),
+          },
+        ]);
+      }
+
+      if (!alreadyThere) {
+        useAddProduct(values, navigation, token);
+      }
+    });
     actions.resetForm();
   };
 
@@ -30,9 +47,9 @@ const AddProduct = ({ navigation }) => {
 
         <Formik
           initialValues={{
+            productCode: text,
             productName: "",
             productPrice: "",
-            productCode: text,
             quantity: "",
             description: "",
           }}
@@ -49,7 +66,7 @@ const AddProduct = ({ navigation }) => {
               <TextInput
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("productCode")}
-                value={text}
+                value={formikProps.values.productCode}
               />
 
               <TextInput

@@ -1,3 +1,5 @@
+const { Alert } = require("react-native");
+
 const myURL = "https://invkom-backend.herokuapp.com";
 
 async function useAddProduct(values, navigation, myToken) {
@@ -21,6 +23,14 @@ async function useAddProduct(values, navigation, myToken) {
       }),
     });
     const toJson = await response.json();
+
+    if (toJson.response === "product added successfully") {
+      return Alert.alert("Done", "Product Added Successfully", [
+        {
+          text: "Close",
+        },
+      ]);
+    }
 
     navigation.navigate("AddProduct");
   } catch (error) {

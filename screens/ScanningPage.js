@@ -38,8 +38,8 @@ export default function ScanningPage({ navigation }) {
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
     setText(data);
+    setScanned(true);
   };
 
   // Check permissions and return the screens

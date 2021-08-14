@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, FlatList, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 import useHandleConfirmation from "../CustomHooks/HandleConfirmation";
+import { borderTop } from "styled-system";
 // import usePreSell from "../CustomHooks/PreSellHook";
 
 export default function SellingPage({ navigation }) {
@@ -20,11 +21,6 @@ export default function SellingPage({ navigation }) {
     setConfirmed,
   } = useContext(myContext);
 
-  const MyAlert = Alert.alert("Confirmed", "Done Successfully", {
-    text: "X",
-    onPress: () => setConfirmed(false),
-  });
-
   // Request Camera Permission
   useEffect(() => {
     setProducts([]);
@@ -33,9 +29,11 @@ export default function SellingPage({ navigation }) {
 
   // calculating total price
   useEffect(() => {
+    let total = 0;
     products.forEach((item) => {
-      setTotalPrice((prev) => (prev += item.productPrice));
+      total += item.productPrice;
     });
+    setTotalPrice(total);
   }, [products]);
 
   const askForCameraPermission = () => {
@@ -47,10 +45,13 @@ export default function SellingPage({ navigation }) {
 
   const handleConfirmation = () => {
     products.forEach((item) => {
-      useHandleConfirmation(item, token);
+      useHandleConfirmation(item, token, setConfirmed);
     });
+  };
 
-    setConfirmed(true);
+  const handleRemoveFromPreSell = (id) => {
+    const removeItem = products.filter((item) => item._id !== id);
+    setProducts([...removeItem]);
   };
 
   // What happens when we scan the bar code
@@ -75,8 +76,8 @@ export default function SellingPage({ navigation }) {
         });
         const toJson = await response.json();
 
-        // To not add the item twice
         if (toJson.length) {
+          // To not add the item twice
           let alreadyThere = false;
           products.forEach((obj) => {
             obj._id !== toJson[0]._id
@@ -87,6 +88,12 @@ export default function SellingPage({ navigation }) {
           if (!alreadyThere) {
             setProducts([...products, toJson[0]]);
           }
+        } else {
+          Alert.alert("Error", "Error in reading the Code !", [
+            {
+              text: "Close",
+            },
+          ]);
         }
       } catch (error) {
         console.error(error);
@@ -133,28 +140,43 @@ export default function SellingPage({ navigation }) {
             <Text style={styles.maintext}>
               Product: {item.productName} |Price: {item.productPrice}$
             </Text>
-            <Button title="X" onPress={() => {}} />
+            <Button
+              title="X"
+              onPress={() => handleRemoveFromPreSell(item._id)}
+            />
           </View>
         )}
       />
 
       <Text style={styles.total}> Total: {totalPrice}$ </Text>
-
-      {scanned && (
+      <View style={styles.buttons}>
         <Button
-          title={"Scan next product"}
-          onPress={() => setScanned(false)}
-          color="tomato"
+          title="Confirm Selling"
+          onPress={handleConfirmation}
+          color="blue"
+          style={styles.btn}
         />
-      )}
 
-      {confirmed ? <MyAlert /> : null}
-      <Button
-        title="Confirm"
-        onPress={handleConfirmation}
-        color="blue"
-        style={styles.btn}
-      />
+        {scanned && (
+          <Button
+            title={"Scan next product"}
+            onPress={() => setScanned(false)}
+            color="tomato"
+            style={styles.btn}
+          />
+        )}
+      </View>
+
+      {confirmed
+        ? Alert.alert("Alert", "Selling done successfully", [
+            {
+              text: "Close",
+              onPress: () => {
+                setConfirmed(false);
+              },
+            },
+          ])
+        : null}
     </View>
   );
 }
@@ -185,7 +207,14 @@ const styles = StyleSheet.create({
     backgroundColor: "tomato",
     marginTop: 15,
   },
+  buttons: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderTopColor: "tomato",
+    borderTopWidth: 2,
+  },
+
   btn: {
-    float: "right",
+    margin: 7,
   },
 });
