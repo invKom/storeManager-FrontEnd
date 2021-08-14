@@ -22,6 +22,9 @@ export default function ContextProvider(props) {
   const [invStatement, setInvStatement] = useState([]);
   const [sellingStatement, setSellingStatement] = useState([]);
 
+  // To handle Confirmed selling
+  const [confirmed, setConfirmed] = useState(false);
+
   let allState = {
     token,
     setToken,
@@ -47,6 +50,8 @@ export default function ContextProvider(props) {
     setSellingStatement,
     toggleModalSelling,
     setToggleModalSelling,
+    confirmed,
+    setConfirmed,
   };
 
   return (

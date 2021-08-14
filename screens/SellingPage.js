@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button, FlatList } from "react-native";
+import { Text, View, StyleSheet, Button, FlatList, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
-
+import useHandleConfirmation from "../CustomHooks/HandleConfirmation";
 // import usePreSell from "../CustomHooks/PreSellHook";
 
 export default function SellingPage({ navigation }) {
@@ -16,14 +16,14 @@ export default function SellingPage({ navigation }) {
     setProducts,
     totalPrice,
     setTotalPrice,
+    confirmed,
+    setConfirmed,
   } = useContext(myContext);
 
-  const askForCameraPermission = () => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  };
+  const MyAlert = Alert.alert("Confirmed", "Done Successfully", {
+    text: "X",
+    onPress: () => setConfirmed(false),
+  });
 
   // Request Camera Permission
   useEffect(() => {
@@ -37,6 +37,21 @@ export default function SellingPage({ navigation }) {
       setTotalPrice((prev) => (prev += item.productPrice));
     });
   }, [products]);
+
+  const askForCameraPermission = () => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  };
+
+  const handleConfirmation = () => {
+    products.forEach((item) => {
+      useHandleConfirmation(item, token);
+    });
+
+    setConfirmed(true);
+  };
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
@@ -59,7 +74,6 @@ export default function SellingPage({ navigation }) {
           }),
         });
         const toJson = await response.json();
-
 
         // To not add the item twice
         if (toJson.length) {
@@ -115,9 +129,12 @@ export default function SellingPage({ navigation }) {
         data={products}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <Text style={styles.maintext}>
-            Product: {item.productName} |Price: {item.productPrice}$
-          </Text>
+          <View>
+            <Text style={styles.maintext}>
+              Product: {item.productName} |Price: {item.productPrice}$
+            </Text>
+            <Button title="X" onPress={() => {}} />
+          </View>
         )}
       />
 
@@ -130,6 +147,14 @@ export default function SellingPage({ navigation }) {
           color="tomato"
         />
       )}
+
+      {confirmed ? <MyAlert /> : null}
+      <Button
+        title="Confirm"
+        onPress={handleConfirmation}
+        color="blue"
+        style={styles.btn}
+      />
     </View>
   );
 }
@@ -159,5 +184,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: "tomato",
     marginTop: 15,
+  },
+  btn: {
+    float: "right",
   },
 });
