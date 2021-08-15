@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Modal,
   FlatList,
+  TextInput,
 } from "react-native";
 import {
   Avatar,
@@ -20,8 +21,10 @@ import { color, textAlign } from "styled-system";
 
 import useInvStatement from "../CustomHooks/InvStatementHook";
 import useSellingStatement from "../CustomHooks/SellingStatementHook";
+import useEditQuantity from "../CustomHooks/EditProductQuantity";
 
 import { myContext } from "../Context/myContext";
+import { Formik } from "formik";
 
 const UserPage = ({ navigation }) => {
   const {
@@ -83,6 +86,10 @@ const UserPage = ({ navigation }) => {
     setToggleModalSelling(false);
   };
 
+  const handleEditQuantity = (values) => {
+    useEditQuantity(values, token, setToggleModal);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -123,17 +130,46 @@ const UserPage = ({ navigation }) => {
             data={invStatement}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
-              <Text
-                style={item.quantity === 0 ? styles.empty : styles.invItems}
-              >
-                Product: {item.productName} | Quantity: {item.quantity}
-                {"\n"}
-                Product Code: {item.productCode}
-                {"\n"}
-                Description: {item.description}
-                {"\n"}
-                Price: {item.productPrice}$
-              </Text>
+              <View style={styles.invItems}>
+                <Formik
+                  initialValues={{
+                    quantity: `${item.quantity}`,
+                    productCode: item.productCode,
+                  }}
+                  onSubmit={handleEditQuantity}
+                >
+                  {(formikProps) => (
+                    <>
+                      <Text style={styles.txt}>
+                        Product: {item.productName}
+                        {"\n"}
+                        Description: {item.description}
+                        {"\n"}
+                        Price: {item.productPrice}${"\n"}
+                      </Text>
+
+                      <Text style={styles.txt}>Product Code</Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange("productCode")}
+                        value={formikProps.values.productCode}
+                      />
+                      <Text style={styles.txt}>Quantity</Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange("quantity")}
+                        value={formikProps.values.quantity}
+                      />
+
+                      <Button
+                        style={{ marginTop: 2 }}
+                        title="Edit Quantity"
+                        onPress={formikProps.handleSubmit}
+                      />
+                    </>
+                  )}
+                </Formik>
+              </View>
             )}
           />
           <Button
@@ -199,7 +235,7 @@ const UserPage = ({ navigation }) => {
         <TouchableRipple onPress={handleInventoryStatement}>
           <View style={styles.menuItem}>
             <Icon name="storefront-outline" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Inventory Statement</Text>
+            <Text style={styles.menuItemText}>Manage Inventory</Text>
           </View>
         </TouchableRipple>
 
@@ -276,27 +312,31 @@ const styles = StyleSheet.create({
 
   invItems: {
     backgroundColor: "#ebe6e6",
-    fontSize: 18,
-    color: "#000000",
-    textAlign: "center",
-    marginHorizontal: 3,
-    marginVertical: 15,
-  },
-
-  empty: {
-    backgroundColor: "#b30707",
     fontSize: 15,
     color: "#000000",
     textAlign: "center",
     marginHorizontal: 3,
     marginVertical: 15,
+    padding: 20,
   },
 
   modal: {
     backgroundColor: "#000000",
     alignItems: "center",
-    justifyContent: "center",
     height: "100%",
+  },
+
+  txt: {
+    color: "#000000",
+    fontSize: 15,
+    textAlign: "center",
+  },
+
+  input: {
+    color: "#000000",
+    borderColor: "#000000",
+    textAlign: "center",
+    borderWidth: 2,
   },
 });
 
