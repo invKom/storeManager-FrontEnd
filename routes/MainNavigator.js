@@ -17,6 +17,7 @@ import Header from "../Shared/Header.js";
 
 import { DrawerContent } from "../Shared/DrawerContent";
 import { DrawerContentUser } from "../Shared/DrawerContentUser";
+import { Title } from "react-native-paper";
 
 const Drawer = createDrawerNavigator();
 
@@ -40,10 +41,26 @@ export default function MyUserNavigation() {
         initialRouteName="User"
         drawerContent={(props) => <DrawerContentUser {...props} />}
       >
-        <Drawer.Screen name="UserPage" component={UserPage} />
-        <Drawer.Screen name="AddProduct" component={AddProduct} />
-        <Drawer.Screen name="SellingPage" component={SellingPage} />
-        <Drawer.Screen name="Scanning" component={ScanningPage} />
+        <Drawer.Screen
+          name="UserPage"
+          component={UserPage}
+          options={{ title: "Profile" }}
+        />
+        <Drawer.Screen
+          name="AddProduct"
+          component={AddProduct}
+          options={{ title: "Add Product" }}
+        />
+        <Drawer.Screen
+          name="SellingPage"
+          component={SellingPage}
+          options={{ title: "Selling" }}
+        />
+        <Drawer.Screen
+          name="Scanning"
+          component={ScanningPage}
+          options={{ title: "Code Scanner" }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );

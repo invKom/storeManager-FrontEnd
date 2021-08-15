@@ -18,6 +18,7 @@ export default async function useHandleConfirmation(item, token, setConfirmed) {
     console.log(toJson);
     // To check if the product available before selling
     if (toJson.response == "No enough quantity in the inventory!") {
+      setConfirmed(false);
       return Alert.alert(
         "Error",
         " One of the products is empty in your inventory",

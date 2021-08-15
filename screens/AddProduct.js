@@ -13,31 +13,31 @@ import { Formik } from "formik";
 
 import useAddProduct from "../CustomHooks/AddProductHook.js";
 import { myContext } from "../Context/myContext.js";
+import useInvStatement from "../CustomHooks/InvStatementHook";
 
 const AddProduct = ({ navigation }) => {
   const Separator = () => <View style={myStyles.separator} />;
-  const { token, text, invStatement } = useContext(myContext);
+  const { token, text, invStatement, setInvStatement } = useContext(myContext);
+
+  useEffect(() => {
+    useInvStatement(token, setInvStatement);
+  }, []);
 
   const handleAddProductSubmit = (values, actions) => {
-    let alreadyThere = false;
-    invStatement.forEach((item) => {
-      if (values.productCode != item.productCode) {
-        alreadyThere = false;
-      } else {
-        alreadyThere = true;
-        return Alert.alert("Error", "Product already in your inventory !", [
-          {
-            text: "Close",
-            onPress: () => console.log("pressed"),
-          },
-        ]);
-      }
+    const uniqueValuesFromInv = invStatement.filter(
+      (item) => item.productCode === values.productCode
+    );
 
-      if (!alreadyThere) {
-        useAddProduct(values, navigation, token);
-      }
-    });
-    actions.resetForm();
+    if (uniqueValuesFromInv.length >= 1) {
+      Alert.alert("Error", "Product already in your inventory !", [
+        {
+          text: "Close",
+        },
+      ]);
+    } else {
+      useAddProduct(values, navigation, token);
+      actions.resetForm();
+    }
   };
 
   return (
@@ -47,7 +47,7 @@ const AddProduct = ({ navigation }) => {
 
         <Formik
           initialValues={{
-            productCode: text,
+            productCode: "",
             productName: "",
             productPrice: "",
             quantity: "",
@@ -65,6 +65,9 @@ const AddProduct = ({ navigation }) => {
 
               <TextInput
                 style={myStyles.input}
+                onBlur={formikProps.handleBlur("productCode")}
+                placeholder="Paste the code here"
+                placeholderTextColor="#ffff"
                 onChangeText={formikProps.handleChange("productCode")}
                 value={formikProps.values.productCode}
               />

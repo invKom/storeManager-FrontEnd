@@ -65,8 +65,6 @@ export function DrawerContentUser(props) {
 const styles = StyleSheet.create({
   drawerContent: {
     flex: 1,
-    backgroundColor: "#ebe6e6",
-    height: "100%",
   },
   userInfoSection: {
     alignItems: "center",
@@ -74,7 +72,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     marginTop: 3,
     fontWeight: "bold",
   },

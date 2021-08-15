@@ -10,7 +10,6 @@ import {
 
 const Separator = () => <View style={styles.separator} />;
 
-
 const HomePage = ({ navigation }) => {
   const handleLogin = () => {
     navigation.navigate("Login");
@@ -22,12 +21,11 @@ const HomePage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
-
       <View style={styles.intro}>
         <Text style={styles.header}>
           {" "}
-          Store Management ... Not a hard task anymore !{" "}
+          Store Management ... {"\n"}
+          Not a hard task anymore !{" "}
         </Text>
       </View>
 

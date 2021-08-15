@@ -36,22 +36,49 @@ const UserPage = ({ navigation }) => {
     setInvStatement,
     sellingStatement,
     setSellingStatement,
+    mainMissingItems,
+    setMainMissingItems,
+    mainTotalSelling,
+    setMainTotalSelling,
   } = useContext(myContext);
+
   const handleLogout = () => {
     setToken("");
   };
 
+  useEffect(() => {
+    useInvStatement(token, setInvStatement);
+    useSellingStatement(token, setSellingStatement);
+  }, []);
+
+  useEffect(() => {
+    let missingCount = 0;
+    invStatement.forEach((item) =>
+      item.quantity === 0 ? missingCount++ : missingCount
+    );
+
+    setMainMissingItems(missingCount);
+  }, [invStatement]);
+
+  useEffect(() => {
+    let sellingCount = 0;
+    sellingStatement.forEach((item) => {
+      sellingCount += parseInt(item.productPrice) * parseInt(item.quantitySold);
+    });
+    setMainTotalSelling(sellingCount);
+  }, [sellingStatement]);
+
   const handleInventoryStatement = () => {
-    useInvStatement(token, setInvStatement, setToggleModal);
+    useInvStatement(token, setInvStatement);
+    setToggleModal(true);
   };
 
   const handleSellingStatement = () => {
-    useSellingStatement(token, setSellingStatement, setToggleModalSelling);
+    useSellingStatement(token, setSellingStatement);
+    setToggleModalSelling(true);
   };
 
   const handleCloseModal = () => {
-    setInvStatement([]);
-    setSellingStatement([]);
     setToggleModal(false);
     setToggleModalSelling(false);
   };
@@ -91,7 +118,6 @@ const UserPage = ({ navigation }) => {
       </View>
 
       <Modal visible={toggleModal} animationType="slide">
-        <Button onPress={handleCloseModal} title="X" />
         <View style={styles.modal}>
           <FlatList
             data={invStatement}
@@ -100,16 +126,26 @@ const UserPage = ({ navigation }) => {
               <Text
                 style={item.quantity === 0 ? styles.empty : styles.invItems}
               >
-                Product: {item.productName} | Quantity: {item.quantity} | Price:{" "}
-                {item.productPrice}$ | Product Code: {item.productCode}
+                Product: {item.productName} | Quantity: {item.quantity}
+                {"\n"}
+                Product Code: {item.productCode}
+                {"\n"}
+                Description: {item.description}
+                {"\n"}
+                Price: {item.productPrice}$
               </Text>
             )}
+          />
+          <Button
+            onPress={handleCloseModal}
+            title="X"
+            color="tomato"
+            style={{ width: 7 }}
           />
         </View>
       </Modal>
 
       <Modal visible={toggleModalSelling} animationType="slide">
-        <Button onPress={handleCloseModal} title="X" />
         <View style={styles.modal}>
           <FlatList
             data={sellingStatement}
@@ -117,10 +153,18 @@ const UserPage = ({ navigation }) => {
             renderItem={({ item }) => (
               <Text style={styles.invItems}>
                 Product: {item.productName} | Quantity Sold: {item.quantitySold}{" "}
-                Date and Time Sold: {item.dateSold} {item.timeSold}| Price:{" "}
-                {item.productPrice}$
+                {"\n"}
+                Date/Time Sold: {item.dateSold}/{item.timeSold}
+                {"\n"}
+                Price: {item.productPrice}$
               </Text>
             )}
+          />
+          <Button
+            onPress={handleCloseModal}
+            title="X"
+            color="tomato"
+            style={{ width: 7 }}
           />
         </View>
       </Modal>
@@ -135,11 +179,11 @@ const UserPage = ({ navigation }) => {
             },
           ]}
         >
-          <Title style={{ color: "#ededed" }}>140.50$</Title>
+          <Title style={{ color: "#ededed" }}>{mainTotalSelling}$</Title>
           <Caption style={{ color: "#ededed" }}>Total Sales</Caption>
         </View>
         <View style={styles.infoBox}>
-          <Title style={{ color: "#ededed" }}>5</Title>
+          <Title style={{ color: "#FF6347" }}>{mainMissingItems}</Title>
           <Caption style={{ color: "#ededed" }}>Items Missing</Caption>
         </View>
       </View>
@@ -232,7 +276,7 @@ const styles = StyleSheet.create({
 
   invItems: {
     backgroundColor: "#ebe6e6",
-    fontSize: 15,
+    fontSize: 18,
     color: "#000000",
     textAlign: "center",
     marginHorizontal: 3,

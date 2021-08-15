@@ -3,8 +3,8 @@ const myURL = "https://invkom-backend.herokuapp.com";
 async function useSellingStatement(
   token,
   setSellingStatement,
-  setToggleModalSelling
 ) {
+  setSellingStatement([]);
   try {
     const response = await fetch(`${myURL}/selling-statement`, {
       method: "GET",
@@ -20,8 +20,6 @@ async function useSellingStatement(
   } catch (error) {
     console.error(error);
   }
-
-  setToggleModalSelling(true);
 }
 
 export default useSellingStatement;

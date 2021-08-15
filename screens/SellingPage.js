@@ -4,6 +4,8 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 import useHandleConfirmation from "../CustomHooks/HandleConfirmation";
 import { borderTop } from "styled-system";
+import useInvStatement from "../CustomHooks/InvStatementHook";
+import useSellingStatement from "../CustomHooks/SellingStatementHook";
 // import usePreSell from "../CustomHooks/PreSellHook";
 
 export default function SellingPage({ navigation }) {
@@ -19,13 +21,18 @@ export default function SellingPage({ navigation }) {
     setTotalPrice,
     confirmed,
     setConfirmed,
+    setInvStatement,
+    setSellingStatement,
   } = useContext(myContext);
 
   // Request Camera Permission
   useEffect(() => {
-    setProducts([]);
     askForCameraPermission();
   }, []);
+
+  useEffect(() => {
+    setProducts([]);
+  }, [confirmed]);
 
   // calculating total price
   useEffect(() => {
@@ -47,6 +54,19 @@ export default function SellingPage({ navigation }) {
     products.forEach((item) => {
       useHandleConfirmation(item, token, setConfirmed);
     });
+
+    if (confirmed) {
+      Alert.alert("Alert", "Selling done successfully", [
+        {
+          text: "Close",
+          onPress: () => {
+            setProducts([]);
+            useInvStatement(token, setInvStatement);
+            useSellingStatement(token, setSellingStatement);
+          },
+        },
+      ]);
+    }
   };
 
   const handleRemoveFromPreSell = (id) => {
@@ -77,19 +97,26 @@ export default function SellingPage({ navigation }) {
         const toJson = await response.json();
 
         if (toJson.length) {
-          // To not add the item twice
-          let alreadyThere = false;
-          products.forEach((obj) => {
-            obj._id !== toJson[0]._id
-              ? (alreadyThere = false)
-              : (alreadyThere = true);
-          });
-
-          if (!alreadyThere) {
-            setProducts([...products, toJson[0]]);
+          if (toJson[0].quantity === 0) {
+            return Alert.alert("Error", "Not Enough in the inventory!", [
+              { text: "Close" },
+            ]);
+          } else {
+            // To not add the item twice
+            let uniqueValues = products.filter(
+              (item) => item._id === toJson[0]._id
+            );
+            if (uniqueValues.length !== 1) {
+              setProducts([...products, toJson[0]]);
+            } else {
+              let productToEdit = products.find(
+                (item) => item._id === uniqueValues[0]._id
+              );
+              console.log("Product to edit", productToEdit);
+            }
           }
         } else {
-          Alert.alert("Error", "Error in reading the Code !", [
+          Alert.alert("Error", "Product not in your Inventory !", [
             {
               text: "Close",
             },
@@ -154,7 +181,7 @@ export default function SellingPage({ navigation }) {
           title="Confirm Selling"
           onPress={handleConfirmation}
           color="blue"
-          style={styles.btn}
+          style={styles.btn1}
         />
 
         {scanned && (
@@ -162,21 +189,10 @@ export default function SellingPage({ navigation }) {
             title={"Scan next product"}
             onPress={() => setScanned(false)}
             color="tomato"
-            style={styles.btn}
+            style={styles.btn2}
           />
         )}
       </View>
-
-      {confirmed
-        ? Alert.alert("Alert", "Selling done successfully", [
-            {
-              text: "Close",
-              onPress: () => {
-                setConfirmed(false);
-              },
-            },
-          ])
-        : null}
     </View>
   );
 }
@@ -208,13 +224,17 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   buttons: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     borderTopColor: "tomato",
     borderTopWidth: 2,
   },
 
-  btn: {
-    margin: 7,
+  btn2: {
+    marginLeft: 2,
+  },
+  btn1: {
+    marginRight: 2,
   },
 });

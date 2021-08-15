@@ -23,7 +23,11 @@ export default function ContextProvider(props) {
   const [sellingStatement, setSellingStatement] = useState([]);
 
   // To handle Confirmed selling
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(true);
+
+  // To handle main insights for the user
+  const [mainTotalSelling, setMainTotalSelling] = useState(0);
+  const [mainMissingItems, setMainMissingItems] = useState(0);
 
   let allState = {
     token,
@@ -52,6 +56,10 @@ export default function ContextProvider(props) {
     setToggleModalSelling,
     confirmed,
     setConfirmed,
+    mainMissingItems,
+    setMainMissingItems,
+    mainTotalSelling,
+    setMainTotalSelling,
   };
 
   return (

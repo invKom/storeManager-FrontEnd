@@ -1,6 +1,7 @@
 const myURL = "https://invkom-backend.herokuapp.com";
 
-async function useInvStatement(token, setInvStatement, setToggleModal) {
+async function useInvStatement(token, setInvStatement) {
+  setInvStatement([]);
   try {
     const response = await fetch(`${myURL}/inventory-statement`, {
       method: "GET",
@@ -16,8 +17,6 @@ async function useInvStatement(token, setInvStatement, setToggleModal) {
   } catch (error) {
     console.error(error);
   }
-
-  setToggleModal(true);
 }
 
 export default useInvStatement;

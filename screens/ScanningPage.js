@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, TextInput } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
 
@@ -20,21 +20,10 @@ export default function ScanningPage({ navigation }) {
     })();
   };
 
-  // This to prevent useEffect from rendering at the initial render
-  const initialRender = useRef(true);
-
   // Request Camera Permission
   useEffect(() => {
     askForCameraPermission();
   }, []);
-
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      navigation.navigate("AddProduct");
-    }
-  }, [text]);
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
@@ -71,15 +60,29 @@ export default function ScanningPage({ navigation }) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
+      <Text style={styles.maintext}>
+        {" "}
+        Copy the code and paste it in the add product form
+      </Text>
+      <TextInput value={text} style={styles.input} />
 
-      {scanned && (
+      <View style={styles.buttons}>
+        {scanned && (
+          <Button
+            style={styles.btn1}
+            title={"Scan again?"}
+            onPress={() => setScanned(false)}
+            color="tomato"
+          />
+        )}
+
         <Button
-          title={"Scan again?"}
-          onPress={() => setScanned(false)}
-          color="tomato"
+          style={styles.btn2}
+          title="Add Product"
+          onPress={() => navigation.navigate("AddProduct")}
+          color="blue"
         />
-      )}
+      </View>
     </View>
   );
 }
@@ -87,21 +90,49 @@ export default function ScanningPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000000",
     alignItems: "center",
-    justifyContent: "center",
   },
   maintext: {
     fontSize: 16,
-    margin: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    color: "#ffff",
+    textAlign: "center",
   },
   barcodebox: {
     alignItems: "center",
     justifyContent: "center",
-    height: 300,
-    width: 300,
+    height: 290,
+    width: 350,
     overflow: "hidden",
     borderRadius: 30,
     backgroundColor: "tomato",
+    marginTop: 15,
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    borderTopColor: "tomato",
+    borderTopWidth: 2,
+    marginTop: 5,
+    maxHeight: 35,
+  },
+  input: {
+    textDecorationColor: "#ffff",
+    color: "#ffff",
+    marginBottom: 3,
+    width: 250,
+    padding: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#ffff",
+  },
+  btn2: {
+    marginLeft: 2,
+  },
+  btn1: {
+    marginRight: 2,
   },
 });
