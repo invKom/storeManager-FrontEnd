@@ -59,13 +59,12 @@ export default function SellingPage({ navigation }) {
       Alert.alert("Alert", "Selling done successfully", [
         {
           text: "Close",
-          onPress: () => {
-            setProducts([]);
-            useInvStatement(token, setInvStatement);
-            useSellingStatement(token, setSellingStatement);
-          },
         },
       ]);
+
+      setProducts([]);
+      useInvStatement(token, setInvStatement);
+      useSellingStatement(token, setSellingStatement);
     }
   };
 
@@ -165,8 +164,10 @@ export default function SellingPage({ navigation }) {
         renderItem={({ item }) => (
           <View>
             <Text style={styles.maintext}>
-              Product: {item.productName} |Price: {item.productPrice}$
+              Product: {item.productName} | Price: {item.productPrice}$ |
+              Quantity:
             </Text>
+
             <Button
               title="X"
               onPress={() => handleRemoveFromPreSell(item._id)}
