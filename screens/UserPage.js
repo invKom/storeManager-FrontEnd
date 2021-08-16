@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import uuid from "react-native-uuid";
 import {
   View,
   Button,
@@ -191,7 +192,7 @@ const UserPage = ({ navigation }) => {
         <View style={styles.modal}>
           <FlatList
             data={sellingStatement}
-            keyExtractor={(item) => item._id}
+            keyExtractor={() => uuid.v4()}
             renderItem={({ item }) => (
               <>
                 <Text style={styles.invItems}>

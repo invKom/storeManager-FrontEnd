@@ -28,6 +28,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "Invkom: Store management app that will allow you to sell products and to know what's going on in your store with one click."
+    "description": "Invkom: Store management app that will allow you to sell products and to know what's going on in your store with one click.\n\nFeatures: \n  - Selling through barcode scanner.\n  - Add products.\n  - Manage inventory quantities.\n  - Fast insights.\n  - Selling statement.\n  - Authentication/ Authorization\n  - Forms Validation.\n  - Back-End API"
   }
 }

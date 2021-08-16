@@ -22,11 +22,6 @@ async function usePreSell(code, myToken, products, setProducts, invStatement) {
           { text: "Close" },
         ]);
       } else {
-        // let uniqueValues = products.filter(
-        //   (item) => item._id === toJson[0]._id
-        // );
-        // if (uniqueValues.length !== 1) {
-
         // To Handle adding many products according to there availability
         let alreadyShown = products.filter((item) => {
           return item.productCode === code;
@@ -45,13 +40,6 @@ async function usePreSell(code, myToken, products, setProducts, invStatement) {
         } else {
           setProducts([...products, toJson[0]]);
         }
-
-        // } else {
-        //   let productToEdit = products.find(
-        //     (item) => item._id === uniqueValues[0]._id
-        //   );
-        //   console.log("Product to edit", productToEdit);
-        // }
       }
     } else {
       Alert.alert("Error", "Product not in your Inventory !", [
