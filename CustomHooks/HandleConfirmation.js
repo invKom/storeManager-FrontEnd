@@ -3,10 +3,10 @@ import { Alert } from "react-native";
 export default function useHandleConfirmation(products, token, setConfirmed) {
   let done = 0;
 
-  products.forEach(async (item) => {
+  products.forEach((item) => {
     const { productCode } = item;
     try {
-      const response = await fetch(`${myURL}/sellProduct`, {
+      fetch(`${myURL}/sellProduct`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -16,26 +16,27 @@ export default function useHandleConfirmation(products, token, setConfirmed) {
         body: JSON.stringify({
           barCode: productCode,
         }),
+      }).then((result) => {
+        result.json().then((final) => {
+          console.log(final);
+          done++;
+          // To check if the product available before selling
+          if (final.response == "No enough quantity in the inventory!") {
+            return Alert.alert(
+              "Error",
+              " One of the products is empty in your inventory",
+              [
+                {
+                  text: "Close",
+                },
+              ]
+            );
+          }
+          done === products.length ? setConfirmed(true) : null;
+        });
       });
-      const toJson = await response.json();
-      console.log(toJson);
-      done++;
-      // To check if the product available before selling
-      if (toJson.response == "No enough quantity in the inventory!") {
-        return Alert.alert(
-          "Error",
-          " One of the products is empty in your inventory",
-          [
-            {
-              text: "Close",
-            },
-          ]
-        );
-      }
     } catch (error) {
       console.error(error);
     }
-
-    done === products.length ? setConfirmed(true) : null;
   });
 }
