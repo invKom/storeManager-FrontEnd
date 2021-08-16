@@ -59,6 +59,7 @@ const Register = ({ navigation }) => {
               />
               <Text style={myStyles.errorText}>
                 {formikProps.touched.Email && formikProps.errors.Email}
+                {"\n"}
               </Text>
 
               <Text style={myStyles.text}>User Name</Text>
@@ -71,6 +72,7 @@ const Register = ({ navigation }) => {
               />
               <Text style={myStyles.errorText}>
                 {formikProps.touched.userName && formikProps.errors.userName}
+                {"\n"}
               </Text>
 
               <Text style={myStyles.text}>Password</Text>
@@ -120,7 +122,6 @@ const myStyles = StyleSheet.create({
   input: {
     textDecorationColor: "#ffff",
     color: "#ffff",
-    marginBottom: "3%",
     width: 250,
     padding: 10,
     borderRadius: 6,

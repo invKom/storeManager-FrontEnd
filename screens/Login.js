@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useRef } from "react";
+import * as yup from "yup";
 import {
   View,
   StyleSheet,
@@ -7,12 +8,19 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Formik } from "formik";
 import { myContext } from "../Context/myContext.js";
 
 // Backend API
 const myURL = "https://invkom-backend.herokuapp.com";
+
+// To validate the form
+const ReviewSchema = yup.object({
+  Email: yup.string().required(),
+  Password: yup.string().required(),
+});
 
 const Login = ({ navigation }) => {
   const { token, setToken, error, setError, user, setUser } =
@@ -53,12 +61,17 @@ const Login = ({ navigation }) => {
         }),
       });
       const toJson = await response.json();
-
-      setUser(toJson.response);
-      setToken(toJson.token);
+      if (toJson.token) {
+        setUser(toJson.response);
+        setToken(toJson.token);
+      }
     } catch (error) {
+      Alert.alert("Oops", "Invalid Email or Password !", [
+        {
+          text: "Try Again",
+        },
+      ]);
       console.error(error);
-      setError("Incorrect Email or Password");
     }
 
     // Reset Form input values
@@ -73,6 +86,7 @@ const Login = ({ navigation }) => {
         <Formik
           initialValues={{ Email: "", Password: "" }}
           onSubmit={handleLoginSubmit}
+          validationSchema={ReviewSchema}
         >
           {(formikProps) => (
             <View>
@@ -80,18 +94,29 @@ const Login = ({ navigation }) => {
               <TextInput
                 style={myStyles.input}
                 onChangeText={formikProps.handleChange("Email")}
+                onBlur={formikProps.handleBlur("Email")}
                 value={formikProps.values.Email}
                 autoCompleteType="email"
               />
+
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.Email && formikProps.errors.Email}
+                {"\n"}
+              </Text>
 
               <Text style={myStyles.text}>Password</Text>
               <TextInput
                 secureTextEntry={true}
                 style={myStyles.input}
+                onBlur={formikProps.handleBlur("Password")}
                 autoCompleteType="password"
                 onChangeText={formikProps.handleChange("Password")}
                 value={formikProps.values.Password}
               />
+
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.Password && formikProps.errors.Password}
+              </Text>
 
               <Separator />
               <Button
@@ -102,8 +127,6 @@ const Login = ({ navigation }) => {
             </View>
           )}
         </Formik>
-
-        {error ? <Text style={myStyles.error}>{error}</Text> : null}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -127,7 +150,6 @@ const myStyles = StyleSheet.create({
   input: {
     textDecorationColor: "#ffff",
     color: "#ffff",
-    marginBottom: "3%",
     width: 250,
     padding: 10,
     borderRadius: 6,
@@ -147,9 +169,9 @@ const myStyles = StyleSheet.create({
     borderBottomColor: "#ffff",
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  error: {
+  errorText: {
     color: "red",
-    textAlign: "left",
-    fontSize: 15,
+    fontSize: 10,
+    maxWidth: "55%",
   },
 });

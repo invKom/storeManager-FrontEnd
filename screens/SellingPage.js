@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
+import uuid from "react-native-uuid";
+
 import { Text, View, StyleSheet, Button, FlatList, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { myContext } from "../Context/myContext";
@@ -27,13 +29,29 @@ export default function SellingPage({ navigation }) {
     setSellingStatement,
   } = useContext(myContext);
 
+  // This to prevent useEffect from rendering at the initial render
+  const initialRender = useRef(true);
+
   // Request Camera Permission
   useEffect(() => {
     askForCameraPermission();
   }, []);
 
   useEffect(() => {
-    setProducts([]);
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      Alert.alert("Alert", "Selling done successfully", [
+        {
+          text: "Close",
+        },
+      ]);
+      setProducts([]);
+      useInvStatement(token, setInvStatement);
+      useSellingStatement(token, setSellingStatement);
+      initialRender.current = true;
+      setConfirmed(false);
+    }
   }, [confirmed]);
 
   // calculating total price
@@ -53,21 +71,7 @@ export default function SellingPage({ navigation }) {
   };
 
   const handleConfirmation = () => {
-    products.forEach((item) => {
-      useHandleConfirmation(item, token, setConfirmed);
-    });
-
-    if (confirmed) {
-      Alert.alert("Alert", "Selling done successfully", [
-        {
-          text: "Close",
-        },
-      ]);
-
-      setProducts([]);
-      useInvStatement(token, setInvStatement);
-      useSellingStatement(token, setSellingStatement);
-    }
+    useHandleConfirmation(products, token, setConfirmed);
   };
 
   const handleRemoveFromPreSell = (id) => {
@@ -112,24 +116,25 @@ export default function SellingPage({ navigation }) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <FlatList
-        data={products}
-        // id duplicated !!
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View>
-            <Text style={styles.maintext}>
-              Product: {item.productName} | Price: {item.productPrice}$
-            </Text>
+      <View style={styles.itemToSell}>
+        <FlatList
+          data={products}
+          keyExtractor={() => uuid.v4()}
+          renderItem={({ item }) => (
+            <View>
+              <Text style={styles.maintext}>
+                Product: {item.productName} | Price: {item.productPrice}$
+              </Text>
 
-            {/* Delete all related @ _ @ */}
-            <Button
-              title="X"
-              onPress={() => handleRemoveFromPreSell(item._id)}
-            />
-          </View>
-        )}
-      />
+              {/* Delete all related @ _ @ */}
+              <Button
+                title="X"
+                onPress={() => handleRemoveFromPreSell(item._id)}
+              />
+            </View>
+          )}
+        />
+      </View>
 
       <Text style={styles.total}> Total: {totalPrice}$ </Text>
       <View style={styles.buttons}>
@@ -137,7 +142,6 @@ export default function SellingPage({ navigation }) {
           title="Confirm Selling"
           onPress={handleConfirmation}
           color="blue"
-          style={styles.btn1}
         />
 
         {scanned && (
@@ -145,7 +149,6 @@ export default function SellingPage({ navigation }) {
             title={"Scan next product"}
             onPress={() => setScanned(false)}
             color="tomato"
-            style={styles.btn2}
           />
         )}
       </View>
@@ -159,6 +162,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
+  },
+  itemToSell: {
+    flex: 1,
+    flexDirection: "column",
   },
   maintext: {
     fontSize: 20,
@@ -180,17 +187,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   buttons: {
+    height: "20%",
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     borderTopColor: "tomato",
     borderTopWidth: 2,
-  },
-
-  btn2: {
-    marginLeft: 2,
-  },
-  btn1: {
-    marginRight: 2,
   },
 });

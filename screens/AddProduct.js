@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import * as yup from "yup";
 import {
   View,
   StyleSheet,
@@ -14,6 +15,13 @@ import { Formik } from "formik";
 import useAddProduct from "../CustomHooks/AddProductHook.js";
 import { myContext } from "../Context/myContext.js";
 import useInvStatement from "../CustomHooks/InvStatementHook";
+
+const ReviewSchema = yup.object({
+  productCode: yup.string().required(),
+  productName: yup.string().required(),
+  productPrice: yup.number().required(),
+  quantity: yup.number().required(),
+});
 
 const AddProduct = ({ navigation }) => {
   const Separator = () => <View style={myStyles.separator} />;
@@ -53,6 +61,7 @@ const AddProduct = ({ navigation }) => {
             quantity: "",
             description: "",
           }}
+          validationSchema={ReviewSchema}
           onSubmit={handleAddProductSubmit}
         >
           {(formikProps) => (
@@ -71,6 +80,11 @@ const AddProduct = ({ navigation }) => {
                 onChangeText={formikProps.handleChange("productCode")}
                 value={formikProps.values.productCode}
               />
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.productCode &&
+                  formikProps.errors.productCode}
+                {"\n"}
+              </Text>
 
               <TextInput
                 style={myStyles.input}
@@ -80,6 +94,11 @@ const AddProduct = ({ navigation }) => {
                 onBlur={formikProps.handleBlur("productName")}
                 value={formikProps.values.productName}
               />
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.productName &&
+                  formikProps.errors.productName}
+                {"\n"}
+              </Text>
 
               <TextInput
                 keyboardType="number-pad"
@@ -91,6 +110,12 @@ const AddProduct = ({ navigation }) => {
                 value={formikProps.values.productPrice}
               />
 
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.productPrice &&
+                  formikProps.errors.productPrice}
+                {"\n"}
+              </Text>
+
               <TextInput
                 keyboardType="number-pad"
                 placeholderTextColor="#ffff"
@@ -100,6 +125,11 @@ const AddProduct = ({ navigation }) => {
                 onBlur={formikProps.handleBlur("quantity")}
                 value={formikProps.values.quantity}
               />
+
+              <Text style={myStyles.errorText}>
+                {formikProps.touched.quantity && formikProps.errors.quantity}
+                {"\n"}
+              </Text>
 
               <TextInput
                 placeholder="Description"
@@ -143,7 +173,6 @@ const myStyles = StyleSheet.create({
   input: {
     textDecorationColor: "#ffff",
     color: "#ffff",
-    marginBottom: "3%",
     width: 250,
     padding: 10,
     borderRadius: 6,

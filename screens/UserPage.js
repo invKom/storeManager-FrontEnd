@@ -7,6 +7,8 @@ import {
   Modal,
   FlatList,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import {
   Avatar,
@@ -121,65 +123,68 @@ const UserPage = ({ navigation }) => {
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <Icon name="email" color="#ededed" size={20} />
-          <Text style={{ color: "#ededed", marginLeft: 17 }}>{user.email}</Text>
+          <Text style={{ color: "#ededed", marginLeft: 5 }}>{user.email}</Text>
         </View>
       </View>
 
       <Modal visible={toggleModal} animationType="slide">
-        <View style={styles.modal}>
-          <FlatList
-            data={invStatement}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.invItems}>
-                <Formik
-                  initialValues={{
-                    quantity: `${item.quantity}`,
-                    productCode: item.productCode,
-                  }}
-                  onSubmit={handleEditQuantity}
-                >
-                  {(formikProps) => (
-                    <>
-                      <Text style={styles.txt}>
-                        Product: {item.productName}
-                        {"\n"}
-                        Description: {item.description}
-                        {"\n"}
-                        Price: {item.productPrice}${"\n"}
-                      </Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.modal}>
+            <FlatList
+              data={invStatement}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <View style={styles.invItems}>
+                  <Formik
+                    initialValues={{
+                      quantity: `${item.quantity}`,
+                      productCode: item.productCode,
+                    }}
+                    onSubmit={handleEditQuantity}
+                  >
+                    {(formikProps) => (
+                      <>
+                        <Text style={styles.txt}>
+                          Product: {item.productName}
+                          {"\n"}
+                          Description: {item.description}
+                          {"\n"}
+                          Price: {item.productPrice}${"\n"}
+                        </Text>
 
-                      <Text style={styles.txt}>Product Code</Text>
-                      <TextInput
-                        style={styles.input}
-                        onChangeText={formikProps.handleChange("productCode")}
-                        value={formikProps.values.productCode}
-                      />
-                      <Text style={styles.txt}>Quantity</Text>
-                      <TextInput
-                        style={styles.input}
-                        onChangeText={formikProps.handleChange("quantity")}
-                        value={formikProps.values.quantity}
-                      />
+                        <Text style={styles.txt}>Product Code</Text>
+                        <TextInput
+                          style={styles.input}
+                          onChangeText={formikProps.handleChange("productCode")}
+                          value={formikProps.values.productCode}
+                        />
+                        <Text style={styles.txt}>Quantity</Text>
+                        <TextInput
+                          style={styles.input}
+                          onChangeText={formikProps.handleChange("quantity")}
+                          value={formikProps.values.quantity}
+                          keyboardType="number-pad"
+                        />
+                        <Text>{"\n"}</Text>
+                        <Button
+                          title="Edit Quantity"
+                          onPress={formikProps.handleSubmit}
+                        />
+                      </>
+                    )}
+                  </Formik>
+                </View>
+              )}
+            />
 
-                      <Button
-                        style={{ marginTop: 2 }}
-                        title="Edit Quantity"
-                        onPress={formikProps.handleSubmit}
-                      />
-                    </>
-                  )}
-                </Formik>
-              </View>
-            )}
-          />
-          <Button
-            onPress={handleCloseModal}
-            title="X"
-            color="tomato"
-            style={{ width: 7 }}
-          />
-        </View>
+            <Button
+              onPress={handleCloseModal}
+              title="Close"
+              color="tomato"
+              style={{ marginBottom: 5, marginTop: 5 }}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       <Modal visible={toggleModalSelling} animationType="slide">
@@ -188,20 +193,23 @@ const UserPage = ({ navigation }) => {
             data={sellingStatement}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
-              <Text style={styles.invItems}>
-                Product: {item.productName} | Quantity Sold: {item.quantitySold}{" "}
-                {"\n"}
-                Date/Time Sold: {item.dateSold}/{item.timeSold}
-                {"\n"}
-                Price: {item.productPrice}$
-              </Text>
+              <>
+                <Text style={styles.invItems}>
+                  Product: {item.productName} | Quantity Sold:{" "}
+                  {item.quantitySold} {"\n"}
+                  Date/Time Sold: {item.dateSold}/{item.timeSold}
+                  {"\n"}
+                  Price: {item.productPrice}$
+                </Text>
+              </>
             )}
           />
+
           <Button
             onPress={handleCloseModal}
-            title="X"
+            title="Close"
             color="tomato"
-            style={{ width: 7 }}
+            style={{ marginBottom: 5, marginTop: 5 }}
           />
         </View>
       </Modal>
@@ -316,7 +324,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000000",
     textAlign: "center",
-    marginHorizontal: 3,
     marginVertical: 15,
     padding: 20,
   },

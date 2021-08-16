@@ -23,7 +23,7 @@ export default function ContextProvider(props) {
   const [sellingStatement, setSellingStatement] = useState([]);
 
   // To handle Confirmed selling
-  const [confirmed, setConfirmed] = useState(true);
+  const [confirmed, setConfirmed] = useState(false);
 
   // To handle main insights for the user
   const [mainTotalSelling, setMainTotalSelling] = useState(0);
