@@ -59,7 +59,6 @@ const UserPage = ({ navigation }) => {
     invStatement.forEach((item) =>
       item.quantity === 0 ? missingCount++ : missingCount
     );
-
     setMainMissingItems(missingCount);
   }, [invStatement]);
 
@@ -88,6 +87,8 @@ const UserPage = ({ navigation }) => {
 
   const handleEditQuantity = (values) => {
     useEditQuantity(values, token, setToggleModal);
+
+    useInvStatement(token, setInvStatement);
   };
 
   return (

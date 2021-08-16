@@ -8,7 +8,7 @@ async function useEditQuantity(values, token, setToggleModal) {
   const { quantity, productCode } = values;
   try {
     const response = await fetch(`${myURL}/edit-quantity`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
