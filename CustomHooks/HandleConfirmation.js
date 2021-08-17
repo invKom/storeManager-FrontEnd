@@ -3,8 +3,25 @@ import { Alert } from "react-native";
 export default function useHandleConfirmation(products, token, setConfirmed) {
   let done = 0;
 
-  products.forEach((item) => {
-    const { productCode } = item;
+  // To get unique values from an obj
+  let uniqueItems = Array.from(
+    products
+      .reduce((map, obj) => {
+        // if the code come again it will replace the old value
+        return map.set(obj.productCode, obj);
+      }, new Map())
+      .values()
+  );
+
+  uniqueItems.forEach((item) => {
+    const { productCode, quantity } = item;
+
+    let howManyToDeduct = products.filter(
+      (item) => item.productCode === productCode
+    );
+
+    const newQuantity = quantity - howManyToDeduct.length;
+
     try {
       fetch(`${myURL}/sellProduct`, {
         method: "POST",
@@ -15,6 +32,8 @@ export default function useHandleConfirmation(products, token, setConfirmed) {
         },
         body: JSON.stringify({
           barCode: productCode,
+          newQuantity,
+          newQuantitySold: howManyToDeduct.length,
         }),
       }).then((result) => {
         result.json().then((final) => {
@@ -32,7 +51,7 @@ export default function useHandleConfirmation(products, token, setConfirmed) {
               ]
             );
           }
-          done === products.length ? setConfirmed(true) : null;
+          done === uniqueItems.length ? setConfirmed(true) : null;
         });
       });
     } catch (error) {
