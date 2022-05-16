@@ -1,7 +1,6 @@
-import React from "react";
-import { Text, StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { alignItems } from "styled-system";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function Header() {
   return (

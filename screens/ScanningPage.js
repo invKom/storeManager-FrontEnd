@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button, TextInput } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import React, { useContext, useEffect } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { myContext } from "../Context/myContext";
 
 export default function ScanningPage({ navigation }) {

@@ -1,33 +1,22 @@
+import { Formik } from "formik";
 import React, { useContext, useEffect } from "react";
-import uuid from "react-native-uuid";
 import {
-  View,
-  Button,
-  StyleSheet,
-  SafeAreaView,
-  Modal,
-  FlatList,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Button, FlatList, Keyboard, Modal, SafeAreaView, StyleSheet, TextInput,
+  TouchableWithoutFeedback, View
 } from "react-native";
 import {
-  Avatar,
-  Title,
-  Caption,
-  Text,
-  TouchableRipple,
+  Avatar, Caption,
+  Text, Title, TouchableRipple
 } from "react-native-paper";
-
+import uuid from "react-native-uuid";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { color, textAlign } from "styled-system";
-
+import { myContext } from "../Context/myContext";
+import useEditQuantity from "../CustomHooks/EditProductQuantity";
 import useInvStatement from "../CustomHooks/InvStatementHook";
 import useSellingStatement from "../CustomHooks/SellingStatementHook";
-import useEditQuantity from "../CustomHooks/EditProductQuantity";
 
-import { myContext } from "../Context/myContext";
-import { Formik } from "formik";
+
+
 
 const UserPage = ({ navigation }) => {
   const {

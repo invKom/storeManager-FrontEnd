@@ -1,20 +1,13 @@
-import React, { useContext, useEffect } from "react";
-import * as yup from "yup";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-} from "react-native";
 import { Formik } from "formik";
-
-import useAddProduct from "../CustomHooks/AddProductHook.js";
+import React, { useContext, useEffect } from "react";
+import {
+  Alert, Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View
+} from "react-native";
+import * as yup from "yup";
 import { myContext } from "../Context/myContext.js";
+import useAddProduct from "../CustomHooks/AddProductHook.js";
 import useInvStatement from "../CustomHooks/InvStatementHook";
+
 
 const ReviewSchema = yup.object({
   productCode: yup.string().required(),

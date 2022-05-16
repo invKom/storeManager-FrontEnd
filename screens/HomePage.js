@@ -1,11 +1,6 @@
 import React from "react";
 import {
-  StyleSheet,
-  Button,
-  View,
-  Text,
-  Alert,
-  SafeAreaView,
+  Button, SafeAreaView, StyleSheet, Text, View
 } from "react-native";
 
 const Separator = () => <View style={styles.separator} />;

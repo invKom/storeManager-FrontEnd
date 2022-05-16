@@ -1,23 +1,21 @@
-import React, { useContext } from "react";
-import { myContext } from "../Context/myContext";
-
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-
-import SellingPage from "../screens/SellingPage.js";
+import React, { useContext } from "react";
+import { myContext } from "../Context/myContext";
 import AddProduct from "../screens/AddProduct.js";
-import UserPage from "../screens/UserPage.js";
-import ScanningPage from "../screens/ScanningPage";
-
 import HomePage from "../screens/HomePage.js";
 import LoginPage from "../screens/Login.js";
 import RegisterPage from "../screens/Register.js";
-
-import Header from "../Shared/Header.js";
-
+import ScanningPage from "../screens/ScanningPage";
+import SellingPage from "../screens/SellingPage.js";
+import UserPage from "../screens/UserPage.js";
 import { DrawerContent } from "../Shared/DrawerContent";
 import { DrawerContentUser } from "../Shared/DrawerContentUser";
-import { Title } from "react-native-paper";
+
+
+
+
+
 
 const Drawer = createDrawerNavigator();
 

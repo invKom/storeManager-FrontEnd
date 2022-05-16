@@ -1,16 +1,9 @@
-import React, { useEffect, useContext, useRef } from "react";
-import * as yup from "yup";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-} from "react-native";
 import { Formik } from "formik";
+import React, { useContext, useEffect, useRef } from "react";
+import {
+  Alert, Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View
+} from "react-native";
+import * as yup from "yup";
 import { myContext } from "../Context/myContext.js";
 
 // Backend API

@@ -1,14 +1,8 @@
+import { Formik } from "formik";
 import React from "react";
 import {
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View
 } from "react-native";
-import { Formik } from "formik";
 import * as yup from "yup";
 import useRegister from "../CustomHooks/RegisterHook.js";
 const validator =

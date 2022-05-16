@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useRef } from "react";
-import uuid from "react-native-uuid";
-
-import { Text, View, StyleSheet, Button, FlatList, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import React, { useContext, useEffect, useRef } from "react";
+import { Alert, Button, FlatList, StyleSheet, Text, View } from "react-native";
+import uuid from "react-native-uuid";
 import { myContext } from "../Context/myContext";
 import useHandleConfirmation from "../CustomHooks/HandleConfirmation";
-import { borderTop } from "styled-system";
-
+import usePreSell from "../CustomHooks/HandlePreSell";
 import useInvStatement from "../CustomHooks/InvStatementHook";
 import useSellingStatement from "../CustomHooks/SellingStatementHook";
-import usePreSell from "../CustomHooks/HandlePreSell";
+
+
 
 export default function SellingPage({ navigation }) {
   const {

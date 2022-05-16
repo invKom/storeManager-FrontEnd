@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Title, Drawer } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Drawer, Title } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 export function DrawerContent(props) {
   return (
